@@ -200,39 +200,7 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-# ==========================================
-# 🚀 手机端友好：顶部导航替换侧边栏
-# ==========================================
 
-# 1. 顶部用户信息 (原本在侧边栏的内容)
-col_user, col_logout = st.columns([3, 1])
-with col_user:
-    st.markdown(f"### 🎯 Life OS | 👤 {st.session_state.get('name', 'User')}")
-with col_logout:
-    # 退出按钮也放在顶部
-    authenticator.logout("Logout", "main")
-
-st.markdown("---")
-
-# 2. 核心导航：改用 Tabs，手机端横向滑动非常方便
-# 这会直接出现在屏幕最上方，不需要点那个 ">" 箭头
-tab1, tab2, tab3, tab4 = st.tabs(["🏠 Dashboard", "💰 Finance", "💪 Health", "⚙️ Settings"])
-
-# 3. 根据 Tab 分发内容
-with tab1:
-    render_dashboard(db)
-
-with tab2:
-    # 这一步最重要！把 Finance 录入逻辑放这里
-    render_finance_page(db, gemini_model, supabase)
-
-with tab3:
-    # 渲染健康页面
-    render_health_page(db) # 确保你有这个函数
-
-with tab4:
-    # 设置页面
-    st.info("System Settings & API Status: Online")
 
 def init_supabase() -> Optional[Client]:
     """Initialize Supabase client from secrets."""
