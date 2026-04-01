@@ -200,26 +200,39 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-# --- 顶部导航 (手机端更友好) ---
-# 不要用 st.sidebar，改用 st.segmented_control 或 st.selectbox
-menu = st.selectbox(
-    "Choose Service", 
-    ["🏠 Dashboard", "💰 Finance", "💪 Health", "📈 Investments"],
-    index=0
-)
+# ==========================================
+# 🚀 手机端友好：顶部导航替换侧边栏
+# ==========================================
 
-# --- 根据选择显示内容 ---
-if menu == "🏠 Dashboard":
-    st.title("🎯 Life OS Dashboard")
-    # 这里放你原本的 Metrics 和 Charts 代码...
+# 1. 顶部用户信息 (原本在侧边栏的内容)
+col_user, col_logout = st.columns([3, 1])
+with col_user:
+    st.markdown(f"### 🎯 Life OS | 👤 {st.session_state.get('name', 'User')}")
+with col_logout:
+    # 退出按钮也放在顶部
+    authenticator.logout("Logout", "main")
 
-elif menu == "💰 Finance":
-    st.title("Expense Tracking")
-    # 在这里加入 st.file_uploader("Upload Receipt") 逻辑
+st.markdown("---")
 
-elif menu == "💪 Health":
-    st.title("Health Tracker")
-    # 在这里加入 st.file_uploader("Upload Evolt") 逻辑
+# 2. 核心导航：改用 Tabs，手机端横向滑动非常方便
+# 这会直接出现在屏幕最上方，不需要点那个 ">" 箭头
+tab1, tab2, tab3, tab4 = st.tabs(["🏠 Dashboard", "💰 Finance", "💪 Health", "⚙️ Settings"])
+
+# 3. 根据 Tab 分发内容
+with tab1:
+    render_dashboard(db)
+
+with tab2:
+    # 这一步最重要！把 Finance 录入逻辑放这里
+    render_finance_page(db, gemini_model, supabase)
+
+with tab3:
+    # 渲染健康页面
+    render_health_page(db) # 确保你有这个函数
+
+with tab4:
+    # 设置页面
+    st.info("System Settings & API Status: Online")
 
 def init_supabase() -> Optional[Client]:
     """Initialize Supabase client from secrets."""
