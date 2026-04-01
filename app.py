@@ -200,7 +200,26 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+# --- 顶部导航 (手机端更友好) ---
+# 不要用 st.sidebar，改用 st.segmented_control 或 st.selectbox
+menu = st.selectbox(
+    "Choose Service", 
+    ["🏠 Dashboard", "💰 Finance", "💪 Health", "📈 Investments"],
+    index=0
+)
 
+# --- 根据选择显示内容 ---
+if menu == "🏠 Dashboard":
+    st.title("🎯 Life OS Dashboard")
+    # 这里放你原本的 Metrics 和 Charts 代码...
+
+elif menu == "💰 Finance":
+    st.title("Expense Tracking")
+    # 在这里加入 st.file_uploader("Upload Receipt") 逻辑
+
+elif menu == "💪 Health":
+    st.title("Health Tracker")
+    # 在这里加入 st.file_uploader("Upload Evolt") 逻辑
 
 def init_supabase() -> Optional[Client]:
     """Initialize Supabase client from secrets."""
