@@ -45,7 +45,9 @@ st.markdown("""
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
+    header[data-testid="stHeader"] {
+    background: rgba(0,0,0,0);
+}
     
     /* Dark theme enhancements */
     .main .block-container {
